@@ -11,10 +11,16 @@ const NAV_LINKS = [
   { label: "Library", href: "#library" },
 ] as const;
 
-function MenuIcon({ isOpen }: { isOpen: boolean }) {
+function MenuIcon({
+  isOpen,
+  className = "",
+}: {
+  isOpen: boolean;
+  className?: string;
+}) {
   return (
     <span
-      className={`menu-icon ml-3 text-neutral-900 ${isOpen ? "menu-icon--open" : ""}`}
+      className={`menu-icon text-neutral-900 ${isOpen ? "menu-icon--open" : ""} ${className}`}
       aria-hidden="true"
     >
       <span className="menu-icon__wrapper">
@@ -86,6 +92,7 @@ export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const ctaCardRef = useRef<HTMLDivElement>(null);
+  const mobileActionsRef = useRef<HTMLDivElement>(null);
   const navItemsRef = useRef<HTMLLIElement[]>([]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuTimelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -95,6 +102,7 @@ export default function Navbar() {
     const panel = menuPanelRef.current;
     const navItems = navItemsRef.current.filter(Boolean);
     const ctaCard = ctaCardRef.current;
+    const mobileActions = mobileActionsRef.current;
 
     if (!panel) return;
 
@@ -108,6 +116,9 @@ export default function Navbar() {
     gsap.set(navItems, { opacity: 0, x: 10 });
     if (ctaCard) {
       gsap.set(ctaCard, { opacity: 0, x: 8 });
+    }
+    if (mobileActions) {
+      gsap.set(mobileActions, { opacity: 0, x: 8 });
     }
   }, []);
 
@@ -145,6 +156,7 @@ export default function Navbar() {
     const panel = menuPanelRef.current;
     const navItems = navItemsRef.current.filter(Boolean);
     const ctaCard = ctaCardRef.current;
+    const mobileActions = mobileActionsRef.current;
 
     if (!panel) return;
 
@@ -161,7 +173,8 @@ export default function Navbar() {
           { opacity: 1, x: 0, duration: 0.42, stagger: 0.06 },
           0.2
         )
-        .to(ctaCard, { opacity: 1, x: 0, duration: 0.4 }, 0.34);
+        .to(ctaCard, { opacity: 1, x: 0, duration: 0.4 }, 0.34)
+        .to(mobileActions, { opacity: 1, x: 0, duration: 0.4 }, 0.42);
     } else {
       menuTimelineRef.current = gsap
         .timeline({
@@ -182,6 +195,7 @@ export default function Navbar() {
           },
           0
         )
+        .to(mobileActions, { opacity: 0, x: 8, duration: 0.28 }, 0.06)
         .to(ctaCard, { opacity: 0, x: 8, duration: 0.28 }, 0.1)
         .to(
           panel,
@@ -215,9 +229,9 @@ export default function Navbar() {
           Afterword
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-3.5">
-
-          <StartReadingButton className="hidden md:inline-flex" />
+        {/* Desktop controls — unchanged */}
+        <div className="hidden items-center gap-3 sm:gap-3.5 md:flex">
+          <StartReadingButton />
 
           <PillButton
             ref={menuButtonRef}
@@ -233,18 +247,34 @@ export default function Navbar() {
             <span className="inline-block w-[2.875rem] text-left">
               {menuLabel}
             </span>
-            <MenuIcon isOpen={isOpen} />
+            <MenuIcon isOpen={isOpen} className="ml-3" />
           </PillButton>
         </div>
+
+        {/* Mobile — circular menu button */}
+        <button
+          type="button"
+          onClick={toggleMenu}
+          className={`group flex h-11 w-11 items-center justify-center rounded-full transition-[transform,background-color] duration-300 ease-out md:hidden ${
+            isOpen
+              ? "bg-white text-neutral-900"
+              : "bg-white/95 text-neutral-900 hover:-translate-y-px hover:bg-white active:bg-neutral-100"
+          }`}
+          aria-expanded={isOpen}
+          aria-controls="nav-menu"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
+          <MenuIcon isOpen={isOpen} />
+        </button>
       </div>
 
       <div
         id="nav-menu"
         ref={menuPanelRef}
-        className="fixed inset-x-4 top-[5.5rem] z-[60] sm:inset-x-auto sm:right-10 sm:left-auto sm:top-[5.75rem] lg:right-16 xl:right-20"
+        className="fixed inset-x-0 top-[4.25rem] z-[60] max-h-[calc(100dvh-4.25rem)] overflow-y-auto bg-background px-4 pb-6 pt-3 md:inset-x-4 md:left-auto md:right-10 md:top-[5.5rem] md:max-h-none md:overflow-visible md:bg-transparent md:px-0 md:pb-0 md:pt-0 lg:right-16 xl:right-20"
       >
-        <div className="mx-auto flex w-full max-w-sm flex-col gap-3.5 sm:mx-0 sm:w-[22rem] lg:w-[24rem]">
-          <nav className="rounded-[2rem] border border-neutral-200/90 bg-white p-7 sm:p-8">
+        <div className="mx-auto flex w-full max-w-sm flex-col gap-3 md:mx-0 md:w-[22rem] lg:w-[24rem]">
+          <nav className="rounded-[1.25rem] border border-neutral-200/90 bg-white p-6 md:rounded-[2rem] md:p-8">
             <ul className="flex flex-col gap-0.5">
               {NAV_LINKS.map((link, index) => (
                 <li
@@ -266,25 +296,30 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-
-            <div className="mt-5 flex flex-col gap-2.5 border-t border-neutral-200/80 pt-5 md:hidden">
-              <PillButton className="w-full border border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 active:bg-neutral-100">
-                Login
-              </PillButton>
-              <StartReadingButton className="w-full" />
-            </div>
           </nav>
 
           <div
             ref={ctaCardRef}
-            className="rounded-[2rem] border border-neutral-200/90 bg-white p-7 sm:p-8"
+            className="rounded-[1.25rem] border border-neutral-200/90 bg-white p-6 md:rounded-[2rem] md:p-8"
           >
             <h3 className="font-heading text-[1.375rem] font-normal leading-[1.35] tracking-[0.01em] text-neutral-900 sm:text-2xl">
               Start building your reading history.
             </h3>
-            <PillButton className="mt-7 w-full bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-950 sm:mt-8">
+            <PillButton className="mt-6 w-full bg-neutral-900 text-white hover:bg-neutral-800 active:bg-neutral-950 md:mt-8">
               Get Started
             </PillButton>
+          </div>
+
+          {/* Mobile-only action cards */}
+          <div
+            ref={mobileActionsRef}
+            className="flex flex-col gap-3 md:hidden"
+          >
+            
+
+            <div className="rounded-[1.25rem] border border-neutral-200/90 bg-white p-5">
+              <StartReadingButton className="w-full" />
+            </div>
           </div>
         </div>
       </div>
