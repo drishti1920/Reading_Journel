@@ -41,3 +41,108 @@ h5,
 h6 {
   font-family: var(--font-heading), serif;
 }
+
+.menu-icon {
+  --menu-icon-size: 15px;
+  --menu-dot-size: 3.5px;
+
+  width: var(--menu-icon-size);
+  height: var(--menu-icon-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.menu-icon__wrapper {
+  width: var(--menu-icon-size);
+  height: var(--menu-icon-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.25s ease-out;
+}
+
+.menu-icon__row {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.menu-icon__row-bottom {
+  align-items: flex-end;
+}
+
+.menu-icon__dot {
+  width: var(--menu-dot-size);
+  height: var(--menu-dot-size);
+  background-color: currentColor;
+  border-radius: 50%;
+  transition: all 0.25s ease-out;
+  flex-shrink: 0;
+}
+
+.menu-icon__row-horizontal {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  transition: all 0.25s ease-out;
+}
+
+.menu-icon__row-vertical {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: fit-content;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  transform: translateX(-50%);
+  transition: all 0.25s ease-out;
+}
+
+.group:hover .menu-icon__row-horizontal,
+.menu-icon--open .menu-icon__row-horizontal {
+  width: calc(var(--menu-icon-size) * 2.5);
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.group:hover .menu-icon__row-vertical,
+.menu-icon--open .menu-icon__row-vertical {
+  height: calc(var(--menu-icon-size) * 2.5);
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.group:hover .menu-icon__dot-middle-v,
+.menu-icon--open .menu-icon__dot-middle-v {
+  border-radius: 2px;
+  height: var(--menu-icon-size);
+  width: var(--menu-dot-size);
+}
+
+.group:hover .menu-icon__dot-middle-h,
+.menu-icon--open .menu-icon__dot-middle-h {
+  border-radius: 2px;
+  width: var(--menu-icon-size);
+  height: var(--menu-dot-size);
+}
+
+.menu-icon--open .menu-icon__wrapper {
+  transform: rotate(45deg) scale(1.15);
+}
