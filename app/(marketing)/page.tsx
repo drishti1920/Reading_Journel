@@ -1,3 +1,4 @@
+import ScrollExperience from "@/components/ScrollExperience";
 import CTA from "@/features/landing/components/CTA";
 import Hero from "@/features/landing/components/Hero";
 import Library from "@/features/landing/components/Library";
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Navbar />
       <main>
       <Hero />
+      <ScrollExperience />
       <ReadingJourney />
       <Quotes />
       <Timeline />
