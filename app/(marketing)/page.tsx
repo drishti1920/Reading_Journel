@@ -1,7 +1,7 @@
 import ScrollExperience from "@/components/ScrollExperience";
 import CTA from "@/features/landing/components/CTA";
 import Hero from "@/features/landing/components/Hero";
-import Library from "@/features/landing/components/Library";
+import LibrarySection from "@/components/LibrarySection";
 import Navbar from "@/features/landing/components/Navbar";
 import Quotes from "@/features/landing/components/Quotes";
 import ReadingJourney from "@/features/landing/components/ReadingJourney";
@@ -15,7 +15,7 @@ export default function HomePage() {
       <ScrollExperience />
       <ReadingJourney />
       <Quotes />
-      <Library />
+      <LibrarySection />
       <CTA />
       </main>
     </>
