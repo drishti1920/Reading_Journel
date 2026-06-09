@@ -7,12 +7,36 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const BOOKS = [
-  { title: "Dune", author: "Frank Herbert", color: "#c8a97e" },
-  { title: "The Waves", author: "Virginia Woolf", color: "#3d5a80" },
-  { title: "Beloved", author: "Toni Morrison", color: "#8b4513" },
-  { title: "Siddhartha", author: "Hermann Hesse", color: "#2d6a4f" },
-  { title: "Middlemarch", author: "George Eliot", color: "#6b2d8b" },
-  { title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", color: "#8b1a1a" },
+  {
+    title: "Dune",
+    author: "Frank Herbert",
+    cover: "/images/book_cover/dune.jpg",
+  },
+  {
+    title: "The Waves",
+    author: "Virginia Woolf",
+    cover: "/images/book_cover/the_waves.png",
+  },
+  {
+    title: "Beloved",
+    author: "Toni Morrison",
+    cover: "/images/book_cover/beloved.jpg",
+  },
+  {
+    title: "Siddhartha",
+    author: "Hermann Hesse",
+    cover: "/images/book_cover/siddhartha.jpg",
+  },
+  {
+    title: "Middlemarch",
+    author: "George Eliot",
+    cover: "/images/book_cover/middlemarch.jpg",
+  },
+  {
+    title: "The Brothers Karamazov",
+    author: "Fyodor Dostoevsky",
+    cover: "/images/book_cover/the_brothers_karamazov.webp",
+  },
 ] as const;
 
 const BOOK_POSITIONS = [
@@ -380,17 +404,14 @@ export default function ScrollExperience() {
         className="scroll-exp-section relative h-screen w-full overflow-hidden bg-[#0f0d0b]"
       >
         <div className="relative h-screen w-screen overflow-hidden">
-          {BOOKS.map((book, index) => (
+          {BOOKS.map((book) => (
             <div
               key={book.title}
-              className="scroll-exp-book-card absolute flex h-[260px] w-[180px] flex-col justify-between rounded-lg border border-white/15 p-4"
-              style={{ backgroundColor: book.color }}
-            >
-              <p className="flex flex-1 items-center justify-center text-center font-heading text-lg leading-snug text-[#f5f0e8]">
-                {book.title}
-              </p>
-              <p className="text-[12px] text-[#f5f0e8]/55">{book.author}</p>
-            </div>
+              className="scroll-exp-book-card absolute h-[260px] w-[180px] rounded-lg border border-white/15 bg-cover bg-center"
+              style={{ backgroundImage: `url(${book.cover})` }}
+              role="img"
+              aria-label={`${book.title} by ${book.author}`}
+            />
           ))}
         </div>
 

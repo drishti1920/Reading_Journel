@@ -29,6 +29,8 @@ const SHELVES: Shelf[] = [
       { title: "Beloved", author: "Toni Morrison", pages: 324, rating: 5 },
       { title: "To the Lighthouse", author: "Virginia Woolf", pages: 209, rating: 4 },
       { title: "Never Let Me Go", author: "Kazuo Ishiguro", pages: 288, rating: 4 },
+      { title: "The Goldfinch", author: "Donna Tartt", pages: 771, rating: 5 },
+      { title: "A Little Life", author: "Hanya Yanagihara", pages: 720, rating: 4 },
     ],
   },
   {
@@ -39,6 +41,8 @@ const SHELVES: Shelf[] = [
       { title: "Siddhartha", author: "Hermann Hesse", pages: 152, rating: 5 },
       { title: "The Stranger", author: "Albert Camus", pages: 123, rating: 4 },
       { title: "Thus Spoke Zarathustra", author: "Nietzsche", pages: 352, rating: 4 },
+      { title: "The Republic", author: "Plato", pages: 416, rating: 5 },
+      { title: "Being and Time", author: "Martin Heidegger", pages: 589, rating: 4 },
     ],
   },
   {
@@ -50,6 +54,8 @@ const SHELVES: Shelf[] = [
       { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", pages: 286, rating: 5 },
       { title: "Hyperion", author: "Dan Simmons", pages: 482, rating: 4 },
       { title: "Blindsight", author: "Peter Watts", pages: 384, rating: 4 },
+      { title: "Neuromancer", author: "William Gibson", pages: 271, rating: 5 },
+      { title: "Foundation", author: "Isaac Asimov", pages: 244, rating: 4 },
     ],
   },
   {
@@ -60,14 +66,68 @@ const SHELVES: Shelf[] = [
       { title: "Between the World and Me", author: "Ta-Nehisi Coates", pages: 152, rating: 5 },
       { title: "Educated", author: "Tara Westover", pages: 334, rating: 4 },
       { title: "On Writing", author: "Stephen King", pages: 320, rating: 5 },
+      { title: "Men We Reaped", author: "Jesmyn Ward", pages: 272, rating: 5 },
+      { title: "The Argonauts", author: "Maggie Nelson", pages: 160, rating: 4 },
+    ],
+  },
+  {
+    genre: "History & Biography",
+    color: "#5c4033",
+    books: [
+      { title: "Sapiens", author: "Yuval Noah Harari", pages: 443, rating: 5 },
+      { title: "The Warmth of Other Suns", author: "Isabel Wilkerson", pages: 622, rating: 5 },
+      { title: "Catherine the Great", author: "Robert K. Massie", pages: 656, rating: 4 },
+      { title: "Team of Rivals", author: "Doris Kearns Goodwin", pages: 916, rating: 5 },
+      { title: "The Diary of a Young Girl", author: "Anne Frank", pages: 283, rating: 5 },
+      { title: "Leonardo da Vinci", author: "Walter Isaacson", pages: 624, rating: 4 },
+    ],
+  },
+  {
+    genre: "Poetry",
+    color: "#4a3728",
+    books: [
+      { title: "Milk and Honey", author: "Rupi Kaur", pages: 208, rating: 4 },
+      { title: "The Sun and Her Flowers", author: "Rupi Kaur", pages: 256, rating: 4 },
+      { title: "Ariel", author: "Sylvia Plath", pages: 105, rating: 5 },
+      { title: "The Collected Poems", author: "Emily Dickinson", pages: 770, rating: 5 },
+      { title: "Citizen", author: "Claudia Rankine", pages: 160, rating: 5 },
+      { title: "Leaves of Grass", author: "Walt Whitman", pages: 624, rating: 4 },
+    ],
+  },
+  {
+    genre: "Mystery & Thriller",
+    color: "#1e3a5f",
+    books: [
+      { title: "The Silent Patient", author: "Alex Michaelides", pages: 336, rating: 4 },
+      { title: "Gone Girl", author: "Gillian Flynn", pages: 432, rating: 5 },
+      { title: "The Girl with the Dragon Tattoo", author: "Stieg Larsson", pages: 590, rating: 4 },
+      { title: "In the Woods", author: "Tana French", pages: 429, rating: 5 },
+      { title: "The Thursday Murder Club", author: "Richard Osman", pages: 382, rating: 4 },
+      { title: "Big Little Lies", author: "Liane Moriarty", pages: 460, rating: 5 },
+    ],
+  },
+  {
+    genre: "Fantasy",
+    color: "#3b2f6e",
+    books: [
+      { title: "The Name of the Wind", author: "Patrick Rothfuss", pages: 662, rating: 5 },
+      { title: "The Hobbit", author: "J.R.R. Tolkien", pages: 310, rating: 5 },
+      { title: "The Priory of the Orange Tree", author: "Samantha Shannon", pages: 827, rating: 4 },
+      { title: "A Court of Thorns and Roses", author: "Sarah J. Maas", pages: 416, rating: 4 },
+      { title: "The Way of Kings", author: "Brandon Sanderson", pages: 1007, rating: 5 },
+      { title: "Uprooted", author: "Naomi Novik", pages: 435, rating: 5 },
+      { title: "Piranesi", author: "Susanna Clarke", pages: 272, rating: 5 },
     ],
   },
 ];
 
+/** Extra vertical scroll per unit of horizontal travel — makes the walk feel longer */
+const SCROLL_DISTANCE_MULTIPLIER = 1.65;
+
 const TOTAL_BOOKS = SHELVES.reduce((sum, shelf) => sum + shelf.books.length, 0);
 
 function spineHeight(pages: number) {
-  return Math.min(340, Math.max(160, 160 + (pages / 1000) * 180));
+  return Math.min(420, Math.max(200, 200 + (pages / 1000) * 240));
 }
 
 function BookSpine({
@@ -135,7 +195,7 @@ function BookSpine({
       <button
         ref={spineRef}
         type="button"
-        className="relative flex w-11 shrink-0 cursor-pointer flex-col items-center justify-between rounded-t-[3px] px-1.5 py-3 sm:w-14"
+        className="relative flex w-[52px] shrink-0 cursor-pointer flex-col items-center justify-between rounded-t-[4px] px-2 py-4 sm:w-[72px]"
         style={{
           height,
           backgroundColor: shelfColor,
@@ -150,10 +210,12 @@ function BookSpine({
             transform: "rotate(180deg)",
           }}
         >
-          <span className="max-h-32 truncate text-[11px] font-semibold tracking-[0.04em] text-white/90">
+          <span className="max-h-40 truncate text-xs font-semibold tracking-[0.04em] text-white/90 sm:text-[13px]">
             {book.title}
           </span>
-          <span className="truncate text-[9px] text-white/50">{book.author}</span>
+          <span className="truncate text-[10px] text-white/50 sm:text-[11px]">
+            {book.author}
+          </span>
         </div>
 
         <div className="flex flex-col items-center gap-1">
@@ -188,18 +250,18 @@ function GenreShelf({
     <div
       ref={shelfRef}
       data-library-shelf
-      className="min-w-[280px] shrink-0 snap-start"
+      className="min-w-[420px] shrink-0 snap-start sm:min-w-[480px]"
     >
-      <div className="mb-5 flex items-baseline gap-3">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">
+      <div className="mb-7 flex items-baseline gap-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
           {shelf.genre}
         </p>
-        <p className="text-[11px] text-text-secondary">
+        <p className="text-xs text-text-secondary">
           {shelf.books.length} books
         </p>
       </div>
 
-      <div className="flex items-end gap-1.5 px-2">
+      <div className="flex items-end gap-2.5 px-3">
         {shelf.books.map((book) => (
           <div key={book.title} data-library-spine>
             <BookSpine book={book} shelfColor={shelf.color} />
@@ -208,13 +270,13 @@ function GenreShelf({
       </div>
 
       <div
-        className="mt-0 h-1.5 w-full rounded-[3px]"
+        className="mt-0 h-2 w-full rounded-[4px]"
         style={{
           background:
             "linear-gradient(to right, rgba(200,169,126,0.15), rgba(200,169,126,0.35), rgba(200,169,126,0.15))",
         }}
       />
-      <div className="h-3 bg-gradient-to-b from-black/40 to-transparent" />
+      <div className="h-5 bg-gradient-to-b from-black/40 to-transparent" />
     </div>
   );
 }
@@ -228,7 +290,7 @@ function ShelvesTrack({
 }) {
   return (
     <div
-      className={`flex items-start gap-[6vw] px-[10vw] ${
+      className={`flex items-start gap-[12vw] pl-[12vw] pr-[20vw] ${
         mobileScroll
           ? "snap-x snap-mandatory overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           : "flex-row"
@@ -293,7 +355,8 @@ export default function LibrarySection() {
 
       horizontalTrigger?.kill();
       const trackWidth = track.scrollWidth;
-      const scrollDistance = Math.max(trackWidth - window.innerWidth, 0);
+      const horizontalTravel = Math.max(trackWidth - window.innerWidth, 0);
+      const scrollDistance = horizontalTravel * SCROLL_DISTANCE_MULTIPLIER;
       outer.style.height = `${window.innerHeight + scrollDistance}px`;
 
       horizontalTrigger = ScrollTrigger.create({
@@ -301,10 +364,10 @@ export default function LibrarySection() {
         start: "top top",
         end: () => `+=${scrollDistance}`,
         pin: pinContainer,
-        scrub: 1.2,
+        scrub: 1.8,
         anticipatePin: 1,
         onUpdate: (self) => {
-          const x = -(self.progress * scrollDistance);
+          const x = -(self.progress * horizontalTravel);
           gsap.set(track, { x, force3D: true });
 
           if (progressFill) {
@@ -512,7 +575,7 @@ export default function LibrarySection() {
             ref={pinContainerRef}
             className="relative h-screen overflow-hidden"
           >
-            <div className="flex h-full items-center">
+            <div className="flex h-full items-end pb-[12vh]">
               <div ref={trackRef} className="will-change-transform">
                 <ShelvesTrack shelfRefs={shelfRefs} />
               </div>
@@ -539,7 +602,7 @@ export default function LibrarySection() {
                   ref={genreLabelRef}
                   className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-text-secondary"
                 >
-                  Genre 1 of 4
+                  Genre 1 of {SHELVES.length}
                 </p>
               </div>
             </div>
