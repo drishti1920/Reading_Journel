@@ -1,193 +1,3 @@
-// "use client";
-
-// import gsap from "gsap";
-// import { ScrollTrigger } from "gsap/ScrollTrigger";
-// import { useEffect, useRef } from "react";
-
-// gsap.registerPlugin(ScrollTrigger);
-
-// const QUOTES = [
-//   {
-//     text: "Books are a uniquely portable magic.",
-//     author: "Stephen King",
-//     size: "large" as const,
-//   },
-//   {
-//     text: "There is no friend as loyal as a book.",
-//     author: "Ernest Hemingway",
-//     size: "medium" as const,
-//   },
-//   {
-//     text: "I am rooted, but I flow.",
-//     author: "Virginia Woolf",
-//     size: "compact" as const,
-//   },
-//   {
-//     text: "We read to know we are not alone.",
-//     author: "C.S. Lewis",
-//     size: "medium" as const,
-//   },
-// ] as const;
-
-// const SIZE_STYLES = {
-//   large: {
-//     card: "p-7 sm:p-9 min-h-[14rem]",
-//     quote: "text-xl sm:text-2xl leading-relaxed",
-//     mark: "text-5xl sm:text-6xl",
-//   },
-//   medium: {
-//     card: "p-6 sm:p-7 min-h-[11rem]",
-//     quote: "text-lg sm:text-xl leading-relaxed",
-//     mark: "text-4xl sm:text-5xl",
-//   },
-//   compact: {
-//     card: "p-5 sm:p-6 min-h-[9rem]",
-//     quote: "text-base sm:text-lg leading-relaxed",
-//     mark: "text-3xl sm:text-4xl",
-//   },
-// } as const;
-
-// function QuoteCard({
-//   text,
-//   author,
-//   size,
-// }: {
-//   text: string;
-//   author: string;
-//   size: keyof typeof SIZE_STYLES;
-// }) {
-//   const styles = SIZE_STYLES[size];
-
-//   return (
-//     <article
-//       data-quote-card
-//       className={`quote-card group mb-5 break-inside-avoid rounded-2xl border border-border bg-card transition-[transform,background-color,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-accent/35 hover:bg-surface ${styles.card}`}
-//     >
-//       <span
-//         className={`quote-mark inline-block font-heading leading-none text-accent/70 transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:translate-x-0.5 ${styles.mark}`}
-//         aria-hidden="true"
-//       >
-//         &ldquo;
-//       </span>
-
-//       <blockquote
-//         className={`mt-3 font-heading italic text-text-primary ${styles.quote}`}
-//       >
-//         {text}
-//       </blockquote>
-
-//       <p className="mt-5 text-sm text-text-secondary/70 transition-opacity duration-300 group-hover:text-text-secondary">
-//         — {author}
-//       </p>
-//     </article>
-//   );
-// }
-
-// export default function Quotes() {
-//   const sectionRef = useRef<HTMLElement>(null);
-
-//   useEffect(() => {
-//     const section = sectionRef.current;
-//     if (!section) return;
-
-//     const reducedMotion = window.matchMedia(
-//       "(prefers-reduced-motion: reduce)",
-//     ).matches;
-
-//     const ctx = gsap.context(() => {
-//       const cards = gsap.utils.toArray<HTMLElement>("[data-quote-card]");
-//       const placard = section.querySelector("[data-quote-placard]");
-
-//       if (reducedMotion) {
-//         gsap.set([...cards, placard], { opacity: 1, y: 0 });
-//         return;
-//       }
-
-//       cards.forEach((card, index) => {
-//         gsap.from(card, {
-//           opacity: 0,
-//           y: 30,
-//           duration: 0.9,
-//           ease: "power3.out",
-//           delay: index * 0.08,
-//           scrollTrigger: {
-//             trigger: card,
-//             start: "top 88%",
-//             toggleActions: "play none none none",
-//           },
-//         });
-//       });
-
-//       if (placard) {
-//         gsap.from(placard, {
-//           opacity: 0,
-//           y: 24,
-//           duration: 1,
-//           ease: "power3.out",
-//           scrollTrigger: {
-//             trigger: placard,
-//             start: "top 90%",
-//             toggleActions: "play none none none",
-//           },
-//         });
-//       }
-//     }, section);
-
-//     return () => ctx.revert();
-//   }, []);
-
-//   return (
-//     <section
-//       id="quotes"
-//       ref={sectionRef}
-//       className="border-b border-border bg-background px-6 py-20 sm:px-10 sm:py-24 lg:px-16 lg:py-28 xl:px-20"
-//     >
-//       <div className="mx-auto max-w-6xl">
-//         <div className="max-w-3xl">
-//           <p className="text-xs font-medium uppercase tracking-[0.22em] text-accent sm:text-sm">
-//             Favorite Quotes
-//           </p>
-//           <h2 className="mt-5 font-heading text-[2rem] font-normal leading-[1.1] tracking-[-0.01em] text-text-primary sm:text-4xl lg:text-[2.75rem]">
-//             Save the words worth returning to.
-//           </h2>
-//           <p className="mt-5 max-w-xl text-base leading-relaxed text-text-secondary sm:mt-6 sm:text-lg">
-//             Collect passages, ideas, and insights that continue to inspire long
-//             after you&apos;ve finished the book.
-//           </p>
-//         </div>
-
-//         <div className="mt-14 columns-1 gap-5 sm:mt-16 sm:columns-2 lg:mt-20 lg:columns-3 xl:columns-4">
-//           {QUOTES.map((quote) => (
-//             <QuoteCard
-//               key={quote.author}
-//               text={quote.text}
-//               author={quote.author}
-//               size={quote.size}
-//             />
-//           ))}
-//         </div>
-
-//         <div
-//           data-quote-placard
-//           className="mx-auto mt-16 max-w-md border border-border bg-card/60 px-8 py-7 text-center sm:mt-20"
-//         >
-//           <p className="font-heading text-2xl text-text-primary sm:text-[1.75rem]">
-//             2,487 Quotes Saved
-//           </p>
-//           <div className="mx-auto mt-4 h-px w-12 bg-accent/50" />
-//           <p className="mt-4 text-sm tracking-wide text-text-secondary">
-//             Across 143 Books
-//           </p>
-//           <p className="mt-1 text-sm tracking-wide text-text-secondary">
-//             From 78 Authors
-//           </p>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -220,11 +30,6 @@ const QUOTES = [
   },
 ];
 
-const STATS = [
-  { value: 2487, label: "Quotes Saved", suffix: "" },
-  { value: 143,  label: "Books",        suffix: "" },
-  { value: 78,   label: "Authors",      suffix: "" },
-];
 
 /* ─── Quote Card ─────────────────────────────────────────────────────────── */
 function QuoteCard({
@@ -329,65 +134,7 @@ function QuoteCard({
   );
 }
 
-/* ─── Stat Item ──────────────────────────────────────────────────────────── */
-function StatItem({
-  stat,
-  statRef,
-}: {
-  stat: (typeof STATS)[0];
-  statRef: (el: HTMLDivElement | null) => void;
-}) {
-  const numRef = useRef<HTMLSpanElement>(null);
-  const triggered = useRef(false);
 
-  useEffect(() => {
-    const el = numRef.current;
-    if (!el) return;
-
-    const trigger = ScrollTrigger.create({
-      trigger: el,
-      start: "top 80%",
-      onEnter: () => {
-        if (triggered.current) return;
-        triggered.current = true;
-        const counter = { val: 0 };
-        gsap.to(counter, {
-          val: stat.value,
-          duration: 1.8,
-          ease: "power2.out",
-          snap: { val: 1 },
-          onUpdate: () => {
-            if (el) {
-              el.textContent =
-                Math.round(counter.val).toLocaleString() + stat.suffix;
-            }
-          },
-        });
-      },
-    });
-
-    return () => trigger.kill();
-  }, [stat]);
-
-  return (
-    <div ref={statRef} className="flex flex-col items-center gap-3">
-      {/* Top rule */}
-      <div
-        className="h-px w-10"
-        style={{ background: "rgba(200,169,126,0.6)" }}
-      />
-      <span
-        ref={numRef}
-        className="font-heading text-4xl font-semibold tabular-nums text-text-primary sm:text-5xl"
-      >
-        0
-      </span>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-text-secondary">
-        {stat.label}
-      </p>
-    </div>
-  );
-}
 
 /* ─── Main Section ───────────────────────────────────────────────────────── */
 export default function QuotesSection() {
@@ -395,10 +142,8 @@ export default function QuotesSection() {
   const eyebrowRef   = useRef<HTMLParagraphElement>(null);
   const headingRef   = useRef<HTMLHeadingElement>(null);
   const bodyRef      = useRef<HTMLParagraphElement>(null);
-  const statsRowRef  = useRef<HTMLDivElement>(null);
   const cardRefs     = useRef<(HTMLDivElement | null)[]>([]);
-  const statRefs     = useRef<(HTMLDivElement | null)[]>([]);
-
+ 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -427,20 +172,6 @@ export default function QuotesSection() {
         stagger: 0.1,
         scrollTrigger: {
           trigger: cardRefs.current[0],
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      /* ── Stats row fade up ── */
-      gsap.from(statRefs.current.filter(Boolean), {
-        y: 32,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: statsRowRef.current,
           start: "top 80%",
           toggleActions: "play none none none",
         },
@@ -507,19 +238,7 @@ export default function QuotesSection() {
           ))}
         </div>
 
-        {/* ── Stats row ── */}
-        <div
-          ref={statsRowRef}
-          className="mt-20 flex flex-col items-center gap-10 sm:flex-row sm:justify-center sm:gap-20 lg:gap-32"
-        >
-          {STATS.map((stat, i) => (
-            <StatItem
-              key={i}
-              stat={stat}
-              statRef={(el) => { statRefs.current[i] = el; }}
-            />
-          ))}
-        </div>
+       
 
         {/* ── Thin divider below stats ── */}
         <div

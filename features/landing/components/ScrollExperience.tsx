@@ -6,7 +6,19 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BOOKS = [
+type ScrollBook =
+  | {
+      title: string;
+      author: string;
+      cover: string;
+    }
+  | {
+      title: string;
+      author: string;
+      color: string;
+    };
+
+const BOOKS: ScrollBook[] = [
   {
     title: "Dune",
     author: "Frank Herbert",
@@ -37,15 +49,58 @@ const BOOKS = [
     author: "Fyodor Dostoevsky",
     cover: "/images/book_cover/the_brothers_karamazov.webp",
   },
-] as const;
+  {
+    title: "Meditations",
+    author: "Marcus Aurelius",
+    cover:"/images/book_cover/meditations.webp"
+  },
+  {
+    title: "Neuromancer",
+    author: "William Gibson",
+    cover:"/images/book_cover/neuromancer.webp"
+  },
+  {
+    title: "Sapiens",
+    author: "Yuval Noah Harari",
+    cover:"/images/book_cover/sapiens.webp"
+  },
+  {
+    title: "The Name of the Wind",
+    author: "Patrick Rothfuss",
+    cover:"/images/book_cover/the_name_of_the_wind.jpg",
+  },
+  {
+    title: "Gone Girl",
+    author: "Gillian Flynn",
+    cover:"/images/book_cover/gone_girl.jpg"
+  },
+  {
+    title: "Educated",
+    author: "Tara Westover",
+    cover:"/images/book_cover/educated.webp"
+  },
+];
+
+function getBookCardStyle(book: ScrollBook) {
+  if ("cover" in book) {
+    return { backgroundImage: `url(${book.cover})` };
+  }
+  return { backgroundColor: book.color };
+}
 
 const BOOK_POSITIONS = [
-  { left: "5%", top: "15%", rotate: -12 },
-  { left: "22%", top: "55%", rotate: 8 },
-  { left: "42%", top: "8%", rotate: -5 },
-  { left: "60%", top: "40%", rotate: 15 },
-  { left: "75%", top: "10%", rotate: -8 },
-  { left: "85%", top: "60%", rotate: 6 },
+  { left: "3%", top: "12%", rotate: -14 },
+  { left: "3%", top: "58%", rotate: 10 },
+  { left: "26%", top: "6%", rotate: -6 },
+  { left: "38%", top: "44%", rotate: 12 },
+  { left: "50%", top: "6%", rotate: -9 },
+  { left: "50%", top: "62%", rotate: 7 },
+  { left: "72%", top: "8%", rotate: -11 },
+  { left: "64%", top: "50%", rotate: 14 },
+  { left: "88%", top: "28%", rotate: -5 },
+  { left: "16%", top: "34%", rotate: 8 },
+  { left: "26%", top: "68%", rotate: -12 },
+  { left: "78%", top: "62%", rotate: 6 },
 ] as const;
 
 const STATS = [
@@ -173,6 +228,8 @@ export default function ScrollExperience() {
       if (section2Ref.current && cards.length) {
         cards.forEach((card, index) => {
           const pos = BOOK_POSITIONS[index];
+          if (!pos) return;
+
           gsap.set(card, {
             left: pos.left,
             top: pos.top,
@@ -407,11 +464,22 @@ export default function ScrollExperience() {
           {BOOKS.map((book) => (
             <div
               key={book.title}
-              className="scroll-exp-book-card absolute h-[260px] w-[180px] rounded-lg border border-white/15 bg-cover bg-center"
-              style={{ backgroundImage: `url(${book.cover})` }}
+              className={`scroll-exp-book-card absolute h-[260px] w-[180px] rounded-lg border border-white/15 bg-cover bg-center ${
+                "cover" in book ? "" : "flex flex-col justify-between p-4"
+              }`}
+              style={getBookCardStyle(book)}
               role="img"
               aria-label={`${book.title} by ${book.author}`}
-            />
+            >
+              {!("cover" in book) && (
+                <>
+                  <p className="flex flex-1 items-center justify-center text-center font-heading text-base leading-snug text-[#f5f0e8]">
+                    {book.title}
+                  </p>
+                  <p className="text-[11px] text-[#f5f0e8]/55">{book.author}</p>
+                </>
+              )}
+            </div>
           ))}
         </div>
 
